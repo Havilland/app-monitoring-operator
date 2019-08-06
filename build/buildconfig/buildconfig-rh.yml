@@ -1,0 +1,35 @@
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: app-monitor
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    build: app-monitor
+  name: app-monitor
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: app-monitor:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    git:
+      uri: 'https://github.com/havilland/app-monitor.git'
+    type: Git
+  strategy:
+    dockerStrategy:
+      dockerfilePath: build/Dockerfile
+      from:
+        kind: ImageStreamTag
+        name: 'ose-ansible-operator:latest'
+        namespace: 'openshift'
+    type: Docker
+successfulBuildsHistoryLimit: 5
