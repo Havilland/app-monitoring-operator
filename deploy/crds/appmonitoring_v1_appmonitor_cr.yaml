@@ -1,0 +1,7 @@
+apiVersion: app-monitoring.io/v1
+kind: AppMonitor
+metadata:
+  name: example-appmonitor
+spec:
+  # Add fields here
+  size: 3
