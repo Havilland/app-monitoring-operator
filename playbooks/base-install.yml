@@ -99,17 +99,8 @@
           name: metadata.namespace
         subjects:
         - kind: ServiceAccount
-          name: "{{ cluster_prometheus_operator_serviceAccount }}"
+          name: app-monitor-prometheus
           namespace: metadata.namespace
-
-  - name: "Create prometheus-operator.yml from template"
-    template:
-      src: "{{ item }}.j2"
-      dest: "{{ mktemp.stdout }}/{{ item }}"
-    loop:
-      - "prometheus-operator.yml"
-
-
 
   - name: "Deploy prometheus-operator"
     k8s:
@@ -124,7 +115,7 @@
          labels:
            k8s-app: 'app-monitor-prometheus-operator'
         spec:
-         replicas: "{{ cluster_prometheus_operator_size }}"
+         replicas: 1
          selector:
            matchLabels:
              k8s-app: 'app-monitor-prometheus-operator'
@@ -144,7 +135,7 @@
                    - '--crd-apigroup={{ prometheus_api_group }}'
                    - '--disable-auto-user-group'
                  image: '{{ cluster_registry }}/openshift3/ose-prometheus-operator:{{ cluster_openshift_version }}'
-                 imagePullPolicy: {{ cluster_default_image_pull_policy }}
+                 imagePullPolicy: Always
                  ports:
                    - containerPort: 8080
                      name: http
