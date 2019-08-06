@@ -22,7 +22,7 @@ spec:
   runPolicy: Serial
   source:
     git:
-      uri: 'https://github.com/havilland/app-monitor.git'
+      uri: 'https://github.com/havilland/app-monitoring-operator.git'
     type: Git
   strategy:
     dockerStrategy:
