@@ -1,5 +1,11 @@
 ---
 - version: v1
   group: app-monitoring.io
+  kind: AppMonitorBase
+  playbook: /opt/ansible/playbooks/base-install.yml
+
+- version: v1
+  group: app-monitoring.io
   kind: AppMonitor
   role: /opt/ansible/roles/appmonitor
+

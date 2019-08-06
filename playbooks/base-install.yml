@@ -1,0 +1,226 @@
+---
+- hosts: localhost
+  connection: local
+
+  tasks:
+  - name: "Base Installation: create clusterrole for prometheus operator"
+    k8s:
+      verify_ssl: false
+      state: present
+      definition:
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRole
+        metadata:
+          name: metadata.namespace
+        rules:
+        - apiGroups:
+          - apiextensions.k8s.io
+          resources:
+          - customresourcedefinitions
+          verbs:
+          - '*'
+        - apiGroups:
+          - '{{ prometheus_api_group }}'
+          resources:
+          - alertmanagers
+          - prometheuses
+          - prometheuses/finalizers
+          - alertmanagers/finalizers
+          - servicemonitors
+          - prometheusrules
+          verbs:
+          - '*'
+        - apiGroups:
+          - apps
+          resources:
+          - statefulsets
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          - secrets
+          verbs:
+          - '*'
+        - apiGroups:
+          - ""
+          resources:
+          - pods
+          verbs:
+          - list
+          - delete
+        - apiGroups:
+          - ""
+          resources:
+          - services
+          - endpoints
+          verbs:
+          - get
+          - create
+          - update
+        - apiGroups:
+          - ""
+          resources:
+          - nodes
+          verbs:
+          - list
+          - watch
+        - apiGroups:
+          - ""
+          resources:
+          - namespaces
+          verbs:
+          - get
+          - list
+          - watch
+
+  - name: "Base Installation: create service account for custom-prometheus-operator"
+    k8s:
+      verify_ssl: false
+      state: present
+      name: 'app-monitor-prometheus'
+      api_version: v1
+      kind: ServiceAccount
+      namespace: metadata.namespace
+
+  - name: create clusterrolebinding
+    k8s:
+      verify_ssl: false
+      state: present
+      definition:
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRoleBinding
+        metadata:
+          name: metadata.namespace
+        roleRef:
+          apiGroup: rbac.authorization.k8s.io
+          kind: ClusterRole
+          name: metadata.namespace
+        subjects:
+        - kind: ServiceAccount
+          name: "{{ cluster_prometheus_operator_serviceAccount }}"
+          namespace: metadata.namespace
+
+  - name: "Create prometheus-operator.yml from template"
+    template:
+      src: "{{ item }}.j2"
+      dest: "{{ mktemp.stdout }}/{{ item }}"
+    loop:
+      - "prometheus-operator.yml"
+
+
+
+  - name: "Deploy prometheus-operator"
+    k8s:
+      verify_ssl: false
+      state: present
+      definition:
+        apiVersion: apps/v1
+       kind: Deployment
+       metadata:
+         name: 'app-monitor-prometheus-operator'
+         namespace: metadata.namespace
+         labels:
+           k8s-app: 'app-monitor-prometheus-operator'
+       spec:
+         replicas: "{{ cluster_prometheus_operator_size }}"
+         selector:
+           matchLabels:
+             k8s-app: 'app-monitor-prometheus-operator'
+         template:
+           metadata:
+             labels:
+               k8s-app: 'app-monitor-prometheus-operator'
+           spec:
+             containers:
+               - name: 'app-monitor-prometheus-operator'
+                 args:
+                   - '--kubelet-service=kube-system/kubelet'
+                   - '--logtostderr=true'
+                   - '--config-reloader-image={{ cluster_registry }}/openshift3/ose-configmap-reloader:{{ cluster_openshift_version }}'
+                   - '--prometheus-config-reloader={{ cluster_registry }}/openshift3/ose-prometheus-config-reloader:{{ cluster_openshift_version }}'
+                   - '--prometheus-default-base-image={{ cluster_registry }}/openshift3/prometheus'
+                   - '--crd-apigroup={{ prometheus_api_group }}'
+                   - '--disable-auto-user-group'
+                 image: '{{ cluster_registry }}/openshift3/ose-prometheus-operator:{{ cluster_openshift_version }}'
+                 imagePullPolicy: {{ cluster_default_image_pull_policy }}
+                 ports:
+                   - containerPort: 8080
+                     name: http
+                 resources:
+                   limits:
+                     cpu: 200m
+                     memory: 200Mi
+                   requests:
+                     cpu: 100m
+                     memory: 100Mi
+                 securityContext:
+                   allowPrivilegeEscalation: false
+                   readOnlyRootFilesystem: true
+       securityContext:
+         runAsNonRoot: true
+       serviceAccountName: "app-monitor-prometheus"
+
+  - name: "Base Installation: Create app-prometheus clusterrole"
+    k8s:
+      verify_ssl: false
+      state: present
+      definition:
+        apiVersion: rbac.authorization.k8s.io/v1beta1
+        kind: ClusterRole
+        metadata:
+          name: "app-monitor-prometheus"
+        rules:
+          - apiGroups:
+              - authentication.k8s.io
+            attributeRestrictions: null
+            resources:
+              - tokenreviews
+            verbs:
+              - create
+          - apiGroups:
+              - authorization.k8s.io
+            attributeRestrictions: null
+            resources:
+              - subjectaccessreviews
+            verbs:
+              - create
+          - apiGroups: [""]
+            resources:
+            - nodes
+            - services
+            - endpoints
+            - pods
+            verbs: ["get", "list", "watch"]
+          - apiGroups: [""]
+            resources:
+            - configmaps
+            verbs: ["get"]
+          - nonResourceURLs: ["/metrics"]
+            verbs: ["get"]
+
+  - name: "Base Installation: Create clusterrole for grafana"
+    k8s:
+      verify_ssl: false
+      state: present
+      definition:
+        apiVersion: authorization.openshift.io/v1
+        kind: ClusterRole
+        metadata:
+          name: app-monitor-grafana
+        rules:
+          - apiGroups:
+              - authentication.k8s.io
+            attributeRestrictions: null
+            resources:
+              - tokenreviews
+            verbs:
+              - create
+          - apiGroups:
+              - authorization.k8s.io
+            attributeRestrictions: null
+            resources:
+              - subjectaccessreviews
+            verbs:
+              - create

@@ -1,0 +1,7 @@
+apiVersion: app-monitoring.io/v1
+kind: AppMonitorBase
+metadata:
+  name: appmonitor-base
+spec:
+  prometheus_api_group: monitoring.example.com
+
