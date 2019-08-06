@@ -5,6 +5,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: app-monitoring-operator
+  namespace: app-monitor
 roleRef:
   kind: ClusterRole
   name: app-monitoring-operator

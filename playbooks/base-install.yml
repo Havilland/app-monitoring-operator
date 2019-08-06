@@ -117,13 +117,13 @@
       state: present
       definition:
         apiVersion: apps/v1
-       kind: Deployment
-       metadata:
+        kind: Deployment
+        metadata:
          name: 'app-monitor-prometheus-operator'
          namespace: metadata.namespace
          labels:
            k8s-app: 'app-monitor-prometheus-operator'
-       spec:
+        spec:
          replicas: "{{ cluster_prometheus_operator_size }}"
          selector:
            matchLabels:
@@ -158,9 +158,9 @@
                  securityContext:
                    allowPrivilegeEscalation: false
                    readOnlyRootFilesystem: true
-       securityContext:
+        securityContext:
          runAsNonRoot: true
-       serviceAccountName: "app-monitor-prometheus"
+        serviceAccountName: "app-monitor-prometheus"
 
   - name: "Base Installation: Create app-prometheus clusterrole"
     k8s:
