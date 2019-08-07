@@ -152,7 +152,7 @@
                    allowPrivilegeEscalation: false
                    readOnlyRootFilesystem: true
         securityContext:
-         runAsNonRoot: true
+          runAsNonRoot: true
         serviceAccountName: "app-monitoring-operator"
 
   - name: "Base Installation: Create app-prometheus clusterrole"
