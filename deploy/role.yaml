@@ -46,3 +46,10 @@ rules:
   - '*'
   verbs:
   - '*'
+- apiGroups:
+  - rbac.authorization.k8s.io
+  - authorization.openshift.io
+  resources:
+  - clusterroles
+  verbs:
+  - create
