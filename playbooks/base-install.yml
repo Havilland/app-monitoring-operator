@@ -151,9 +151,9 @@
                  securityContext:
                    allowPrivilegeEscalation: false
                    readOnlyRootFilesystem: true
-        securityContext:
-          runAsNonRoot: true
-        serviceAccountName: "app-monitoring-operator"
+             securityContext:
+               runAsNonRoot: true
+             serviceAccountName: "app-monitoring-operator"
 
   - name: "Base Installation: Create app-prometheus clusterrole"
     k8s:
