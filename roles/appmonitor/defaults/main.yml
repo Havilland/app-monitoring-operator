@@ -1,2 +1,3 @@
 ---
 # defaults file for appmonitor
+k8s_auth_verify_ssl: false

@@ -5,17 +5,77 @@
   changed_when: False
   check_mode: no
 
-- name: Check if Prometheus is already deployed
-  k8s_facts:
-    verify_ssl: "{{ k8s_auth_verify_ssl }}"
-    api_version: "{{ cluster_prometheus_apiGroup }}/v1"
-    kind: Prometheus
-    namespace: '{{ current_namespace.metadata.name }}'
-  register: prometheus_deployment
+- name: "Base Installation: Create app-prometheus role"
+  k8s:
+    verify_ssl: false
+    state: present
+    definition:
+      apiVersion: rbac.authorization.k8s.io/v1beta1
+      kind: Role
+      metadata:
+        name: "app-monitor-prometheus"
+      rules:
+        - apiGroups:
+            - authentication.k8s.io
+          attributeRestrictions: null
+          resources:
+            - tokenreviews
+          verbs:
+            - create
+        - apiGroups:
+            - authorization.k8s.io
+          attributeRestrictions: null
+          resources:
+            - subjectaccessreviews
+          verbs:
+            - create
+        - apiGroups: [""]
+          resources:
+          - nodes
+          - services
+          - endpoints
+          - pods
+          verbs: ["get", "list", "watch"]
+        - apiGroups: [""]
+          resources:
+          - configmaps
+          verbs: ["get"]
+        - nonResourceURLs: ["/metrics"]
+          verbs: ["get"]
 
-- debug:
-    msg: '{{ prometheus_deployment }}'
-  when: playbook_debug
+- name: "Base Installation: Create clusterrole for grafana"
+  k8s:
+    verify_ssl: false
+    state: present
+    definition:
+      apiVersion: authorization.openshift.io/v1
+      kind: Role
+      metadata:
+        name: app-monitor-grafana
+      rules:
+        - apiGroups:
+            - authentication.k8s.io
+          attributeRestrictions: null
+          resources:
+            - tokenreviews
+          verbs:
+            - create
+        - apiGroups:
+            - authorization.k8s.io
+          attributeRestrictions: null
+          resources:
+            - subjectaccessreviews
+          verbs:
+            - create
+
+#- name: Check if Prometheus is already deployed
+#  k8s_facts:
+#    verify_ssl: "{{ k8s_auth_verify_ssl }}"
+#    api_version: "{{ cluster_prometheus_apiGroup }}/v1"
+#    kind: Prometheus
+#    namespace: '{{ current_namespace.metadata.name }}'
+#  register: prometheus_deployment
+
 
 - name: Deploying Prometheus in namespace
   block:
@@ -24,7 +84,7 @@
         verify_ssl: "{{ k8s_auth_verify_ssl }}"
         state: present
         api_version: v1
-        name: '{{ cluster_prometheus_namespace_serviceAccount }}'
+        name: app-monitor-prometheus
         kind: ServiceAccount
         namespace: '{{ current_namespace.metadata.name }}'
         definition:
