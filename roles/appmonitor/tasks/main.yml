@@ -1,3 +1,18 @@
 ---
 # tasks file for appmonitor
-- include_tasks: app-monitoring.yml
+#- include_tasks: app-monitoring.yml
+
+- name: Testing
+  k8s:
+    verify_ssl: "{{ k8s_auth_verify_ssl }}"
+    state: present
+    api_version: v1
+    name: app-monitor-prometheus
+    kind: ServiceAccount
+    namespace: '{{ meta.namespace }}'
+    definition:
+      metadata:
+        labels:
+          size: '{{ size }}'
+        annotations:
+          serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"prometheus"}}'
