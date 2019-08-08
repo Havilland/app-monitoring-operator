@@ -9,7 +9,7 @@ spec:
     listKind: AppMonitorList
     plural: appmonitors
     singular: appmonitor
-  scope: Cluster
+  scope: Namespaced
   subresources:
     status: {}
   version: v1

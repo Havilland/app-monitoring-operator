@@ -13,6 +13,6 @@
     definition:
       metadata:
         labels:
-          size: '{{ size }}'
+          size: "'{{ size }}'"
         annotations:
           serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"prometheus"}}'
