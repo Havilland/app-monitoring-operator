@@ -11,7 +11,7 @@
     state: present
     definition:
       apiVersion: rbac.authorization.k8s.io/v1beta1
-      kind: Role
+      kind: ClusterRole
       metadata:
         name: "app-monitor-prometheus"
       rules:
@@ -49,7 +49,7 @@
     state: present
     definition:
       apiVersion: authorization.openshift.io/v1
-      kind: Role
+      kind: ClusterRole
       metadata:
         name: app-monitor-grafana
       rules:
@@ -67,15 +67,6 @@
             - subjectaccessreviews
           verbs:
             - create
-
-#- name: Check if Prometheus is already deployed
-#  k8s_facts:
-#    verify_ssl: "{{ k8s_auth_verify_ssl }}"
-#    api_version: "{{ cluster_prometheus_apiGroup }}/v1"
-#    kind: Prometheus
-#    namespace: '{{ current_namespace.metadata.name }}'
-#  register: prometheus_deployment
-
 
 - name: Deploying Prometheus in namespace
   block:

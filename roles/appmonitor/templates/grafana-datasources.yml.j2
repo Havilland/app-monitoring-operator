@@ -1,0 +1,21 @@
+
+{
+    "apiVersion": 1,
+    "datasources": [
+        {
+            "access": "proxy",
+            "basicAuth": true,
+            "basicAuthPassword": "{{ session_secret }}",
+            "basicAuthUser": "internal",
+            "editable": false,
+            "jsonData": {
+                "tlsSkipVerify": true
+            },
+            "name": "prometheus",
+            "orgId": 1,
+            "type": "prometheus",
+            "url": "https://prometheus.{{ current_namespace.metadata.name }}.svc:9091",
+            "version": 1
+        }
+    ]
+}
