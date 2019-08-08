@@ -101,7 +101,7 @@
         apiVersion: authorization.openshift.io/v1
         kind: ClusterRole
         metadata:
-          name: app-monitor-grafana
+          name: "app-monitor-grafana"
         rules:
           - apiGroups:
               - authentication.k8s.io

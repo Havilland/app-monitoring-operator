@@ -4,7 +4,7 @@ metadata:
   creationTimestamp: null
   name: app-monitoring-operator
 rules:
-  - apiGroups: [rbac.authorization.k8s.io]
+  - apiGroups: [rbac.authorization.k8s.io, authorization.openshift.io]
     resources: [clusterrolebindings, clusterroles, rolebindings, roles]
     verbs: [create, delete, get, list, update, watch]
   - apiGroups: ['']
