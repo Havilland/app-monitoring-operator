@@ -4,4 +4,5 @@ metadata:
   name: example-appmonitor
 spec:
   # Add fields here
-  size: 3
+  size: 2
+
