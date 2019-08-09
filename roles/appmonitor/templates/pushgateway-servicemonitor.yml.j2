@@ -1,9 +1,9 @@
 ---
-apiVersion: {{ cluster_prometheus_apiGroup }}/v1
+apiVersion: {{ prometheus_api_group }}/v1
 kind: ServiceMonitor
 metadata:
   name: pushgateway-servicemonitor
-  namespace: {{ current_namespace.metadata.name }}
+  namespace: {{ meta.namespace }}
   labels:
     prometheus: monitoring
 spec:

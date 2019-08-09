@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Deployment
 metadata:
   name: pushgateway
-  namespace: {{ current_namespace.metadata.name }}
+  namespace: {{ meta.namespace }}
 spec:
   replicas: 1
   selector:
@@ -18,7 +18,7 @@ spec:
       name: pushgateway
     spec:
       containers:
-      - image: "{{ cluster_prometheus_pushgateway_image }}"
+      - image: "{{ pushgateway_image }}"
         livenessProbe:
           httpGet:
             path: /

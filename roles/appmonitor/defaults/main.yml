@@ -1,3 +1,22 @@
 ---
 # defaults file for appmonitor
 k8s_auth_verify_ssl: false
+prometheus_service_account: app-monitor-prometheus
+grafana_service_account: app-monitor-grafana
+prometheus_clusterrole: app-monitor-prometheus
+grafana_clusterrole: app-monitor-grafana
+servicemonitor_label: "app-monitor=prometheus"
+pushgateway_image: "prom/pushgateway"
+prometheus_app_label: "app-monitoring-operator"
+
+oauth_proxy_memory_request: 100Mi
+oauth_proxy_memory_limit: 100Mi
+oauth_proxy_cpu_request: 100m
+oauth_proxy_cpu_limit: 200m
+
+grafana_memory_request: 100Mi
+grafana_memory_limit: 200Mi
+grafana_cpu_request: 100m
+grafana_cpu_limit: 200m
+
+routes_use_encryption: true

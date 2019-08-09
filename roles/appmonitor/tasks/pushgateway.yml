@@ -6,7 +6,7 @@
     api_version: "v1"
     kind: Deployment
     name: pushgateway
-    namespace: '{{ current_namespace.metadata.name }}'
+    namespace: '{{ meta.namespace }}'
   register: pushgateway_deployment
 
 - name: Deploying pushgateway in namespace
@@ -31,7 +31,7 @@
           kind: Service
           metadata:
             name: prometheus-pushgateway
-            namespace: '{{ current_namespace.metadata.name }}'
+            namespace: '{{ meta.namespace }}'
             labels:
               name: pushgateway
           spec:

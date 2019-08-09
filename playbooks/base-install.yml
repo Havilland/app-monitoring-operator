@@ -31,12 +31,12 @@
                  args:
                    - '--kubelet-service=kube-system/kubelet'
                    - '--logtostderr=true'
-                   - '--config-reloader-image={{ cluster_registry }}/openshift3/ose-configmap-reloader:{{ cluster_openshift_version }}'
-                   - '--prometheus-config-reloader={{ cluster_registry }}/openshift3/ose-prometheus-config-reloader:{{ cluster_openshift_version }}'
-                   - '--prometheus-default-base-image={{ cluster_registry }}/openshift3/prometheus'
+                   - '--config-reloader-image={{ registry }}/openshift3/ose-configmap-reloader:{{ openshift_version }}'
+                   - '--prometheus-config-reloader={{ registry }}/openshift3/ose-prometheus-config-reloader:{{ openshift_version }}'
+                   - '--prometheus-default-base-image={{ registry }}/openshift3/prometheus'
                    - '--crd-apigroup=app-monitoring.io'
                    - '--disable-auto-user-group'
-                 image: '{{ cluster_registry }}/openshift3/ose-prometheus-operator:{{ cluster_openshift_version }}'
+                 image: '{{ registry }}/openshift3/ose-prometheus-operator:{{ openshift_version }}'
                  imagePullPolicy: Always
                  ports:
                    - containerPort: 8080
@@ -63,7 +63,7 @@
         apiVersion: rbac.authorization.k8s.io/v1beta1
         kind: ClusterRole
         metadata:
-          name: "app-monitor-prometheus"
+          name: '{{ prometheus_clusterrole }}'
         rules:
           - apiGroups:
               - authentication.k8s.io
@@ -101,7 +101,7 @@
         apiVersion: authorization.openshift.io/v1
         kind: ClusterRole
         metadata:
-          name: "app-monitor-grafana"
+          name: '{{ grafana_clusterrole }}'
         rules:
           - apiGroups:
               - authentication.k8s.io
