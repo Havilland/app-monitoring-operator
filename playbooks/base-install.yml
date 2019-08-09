@@ -2,6 +2,9 @@
 - hosts: localhost
   connection: local
   gather_facts: no
+  vars:
+    prometheus_clusterrole: app-monitor-prometheus
+    grafana_clusterrole: app-monitor-grafana
 
   tasks:
   - name: "Deploy prometheus-operator"

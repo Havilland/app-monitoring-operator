@@ -1,0 +1,19 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ item }}
+  namespace: {{ meta.namespace }}
+  labels:
+    route: {{ item }}
+{% if default_route_label is not none %}
+    {{ default_route_label }}
+{% endif %}
+spec:
+  to:
+    kind: Service
+    name: {{ item }}
+  port:
+    targetPort: https
+  tls:
+    termination: reencrypt
+  wildcardPolicy: None
