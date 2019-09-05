@@ -5,7 +5,7 @@ prometheus_service_account: app-monitor-prometheus
 grafana_service_account: app-monitor-grafana
 prometheus_clusterrole: app-monitor-prometheus
 grafana_clusterrole: app-monitor-grafana
-servicemonitor_label: "app-monitor=prometheus"
+servicemonitor_label: "app-monitor: prometheus"
 pushgateway_image: "prom/pushgateway"
 prometheus_app_label: "app-monitoring-operator"
 
@@ -20,3 +20,9 @@ grafana_cpu_request: 100m
 grafana_cpu_limit: 200m
 
 routes_use_encryption: true
+prometheus_api_group: app-monitoring.io
+registry: registry.redhat.io
+openshift_version: v3.11
+
+grafana_storage_type: none
+cluster_default_image_pull_policy: Always

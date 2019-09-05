@@ -3,7 +3,7 @@ kind: AppMonitorBase
 metadata:
   name: appmonitor-base
 spec:
-  prometheus_api_group: monitoring.example.com
+  prometheus_api_group: app-monitoring.io
   registry: registry.redhat.io
   openshift_version: v3.11
 

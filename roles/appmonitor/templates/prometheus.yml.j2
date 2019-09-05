@@ -6,10 +6,8 @@ metadata:
   namespace: {{ meta.namespace }}
   labels:
     app-monitor: {{ prometheus_app_label }}
-labels:
-  app-prometheus: prometheus
 spec:
-  replicas: '{{ size }}'
+  replicas: {{ size }}
   serviceAccountName: {{ prometheus_service_account }}
   serviceMonitorSelector:
     matchLabels:

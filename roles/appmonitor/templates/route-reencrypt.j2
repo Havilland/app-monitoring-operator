@@ -5,7 +5,7 @@ metadata:
   namespace: {{ meta.namespace }}
   labels:
     route: {{ item }}
-{% if default_route_label is not none %}
+{% if default_route_label is defined and default_route_label is not none %}
     {{ default_route_label }}
 {% endif %}
 spec:

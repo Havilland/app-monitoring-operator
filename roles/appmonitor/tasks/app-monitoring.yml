@@ -132,11 +132,12 @@
     verify_ssl: "{{ k8s_auth_verify_ssl }}"
     state: present
     api_version: v1
-    name: '{{ grafana_service_account }}'
-    kind: ServiceAccount
-    namespace: '{{ meta.namespace }}'
     definition:
+      apiVersion: v1
+      kind: ServiceAccount
       metadata:
+        name: '{{ grafana_service_account }}'
+        namespace: '{{ meta.namespace }}'
         annotations:
            serviceaccounts.openshift.io/oauth-redirectreference.primary: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"grafana"}}'
 
@@ -218,7 +219,7 @@
         resources:
           requests:
             storage: 1Gi
-  when: cluster_prometheus_grafana_storage_type == 'pvc'
+  when: grafana_storage_type == 'pvc'
 
 - name: "Grafana Deployment: template deployment and grafana-config"
   template:
