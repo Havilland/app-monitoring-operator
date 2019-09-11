@@ -6,4 +6,4 @@ metadata:
 spec:
   # Add fields here
   replicas: 2
-  grafana_storage_type: pvc
+  grafana_dashboard_configmap: grafana-data
