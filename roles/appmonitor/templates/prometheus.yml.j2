@@ -7,7 +7,7 @@ metadata:
   labels:
     app-monitor: {{ prometheus_app_label }}
 spec:
-  replicas: {{ size }}
+  replicas: {{ replicas }}
   serviceAccountName: {{ prometheus_service_account }}
   serviceMonitorSelector:
     matchLabels:

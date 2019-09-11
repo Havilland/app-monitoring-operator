@@ -40,7 +40,7 @@ rules:
   - apiGroups: ['']
     resources: [configmaps, endpoints, limitranges, namespaces, nodes, persistentvolumeclaims,
       persistentvolumes, pods, replicationcontrollers, resourcequotas, secrets, services]
-    verbs: [list, watch]
+    verbs: [list, watch, create, get, patch]
   - apiGroups: ['']
     resources: [pods]
     verbs: [get]

@@ -5,5 +5,5 @@ metadata:
   namespace: appmon-test
 spec:
   # Add fields here
-  size: 2
-
+  replicas: 2
+  grafana_storage_type: pvc
