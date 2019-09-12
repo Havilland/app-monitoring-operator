@@ -230,19 +230,6 @@
   register: grafana_cm
   when: grafana_dashboard_configmap is defined and grafana_dashboard_configmap is not none
 
-- name: create grafana-config configmap
-  k8s:
-    verify_ssl: "{{ k8s_auth_verify_ssl }}"
-    state: present
-    definition:
-      apiVersion: v1
-      kind: ConfigMap
-      metadata:
-        name: "{{ grafana_dashboard_configmap }}"
-        namespace: "{{ meta.namespace }}"
-      data: null
-  when: grafana_cm is defined and grafana_cm is not none
-
 - name: "Grafana Deployment: template deployment and grafana-config"
   template:
     src: "{{ item }}.j2"

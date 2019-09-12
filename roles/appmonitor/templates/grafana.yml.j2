@@ -114,9 +114,6 @@ spec:
 {% if grafana_storage_type == 'pvc' %}
         persistentVolumeClaim:
           claimName: {{ grafana_service_account }}-pvc
-{% elif grafana_dashboard_configmap is defined and grafana_dashboard_configmap is not none %}
-        configMap:
-          name: {{ grafana_dashboard_configmap }}
 {% else %}
         emptydir: {}
 {% endif %}
