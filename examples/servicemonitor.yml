@@ -1,0 +1,12 @@
+apiVersion: app-monitoring.io/v1
+kind: ServiceMonitor
+metadata:
+  name: example-app
+  labels:
+    app-monitor: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: example-app
+  endpoints:
+  - port: web
