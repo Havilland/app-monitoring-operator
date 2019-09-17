@@ -12,7 +12,7 @@ spec:
   to:
     kind: Service
     name: {{ item }}
-{% if routes_use_encryption %}
+{% if routes_tls %}
   tls:
-    termination: edge
+    termination: {{ routes_tls_termination }}
 {% endif %}

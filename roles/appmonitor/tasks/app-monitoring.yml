@@ -226,9 +226,8 @@
     api_version: v1
     kind: ConfigMap
     namespace: "{{ meta.namespace }}"
-    name: "{{ grafana_dashboard_configmap }}"
-  register: grafana_cm
-  when: grafana_dashboard_configmap is defined and grafana_dashboard_configmap is not none
+    name: "{{ grafana_dashboard_configmap_name }}"
+  when: grafana_dashboard_configmap is defined and grafana_dashboard_configmap is not none and grafana_dashboard_configmap
 
 - name: "Grafana Deployment: template deployment and grafana-config"
   template:

@@ -19,13 +19,15 @@ grafana_memory_limit: 200Mi
 grafana_cpu_request: 100m
 grafana_cpu_limit: 200m
 
-routes_use_encryption: true
+routes_tls: true
+routes_tls_termination: edge
 prometheus_api_group: app-monitoring.io
 registry: registry.redhat.io
 openshift_version: v3.11
 
 grafana_storage_type: none
 grafana_dashboard_configmap: false
+grafana_dashboard_configmap_name: grafana-dashboards
 cluster_default_image_pull_policy: Always
 
 replicas: 1
