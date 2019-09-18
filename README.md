@@ -23,8 +23,10 @@ oc create -f deploy/operator.yaml
 oc create -f deploy/crds/appmonitoring_v1_appmonitor-base-install_cr.yaml
 ```
 
-To use preprovisioned Grafana Dashboards create a configmap with the name grafana-dashboards in the project where the custom resource will be used and set ```grafana_dashboard_configmap: true``` in the AppMonitor CR. 
+To use preprovisioned Grafana Dashboards create a ConfigMap with the name `grafana-dashboards` in the project where the custom resource will be used and set `grafana_dashboard_configmap: true` in the AppMonitor CR.
+
+If you want to use a ConfigMap named other than `grafana-dashboards`, set `grafana_dashboard_configmap_name` to the name of the ConfigMap.
 
 ## Usage
-The operator deploys and configures Prometheus and Grafana into a project. Both deployments use oauth-proxy for authentication. Prometheus will be deployed with the help of prometheus-operator.
 
+The operator deploys and configures Prometheus and Grafana into a project. Both deployments use oauth-proxy for authentication. Prometheus will be deployed with the help of prometheus-operator.

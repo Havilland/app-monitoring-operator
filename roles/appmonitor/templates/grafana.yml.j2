@@ -96,7 +96,7 @@ spec:
           name: grafana-proxy-secrets
         - mountPath: /etc/grafana/provisioning/datasources
           name: grafana-datasources
-{% if grafana_dashboard_configmap is defined and grafana_dashboard_configmap is not none %}
+{% if grafana_dashboard_configmap is defined and grafana_dashboard_configmap is not none and grafana_dashboard_configmap %}
         - mountPath: /etc/grafana/provisioning/dashboards
           name: grafana-dashboards
 {% endif %}
@@ -121,7 +121,7 @@ spec:
 {% else %}
         emptydir: {}
 {% endif %}
-{% if grafana_dashboard_configmap is defined and grafana_dashboard_configmap is not none %}
+{% if grafana_dashboard_configmap is defined and grafana_dashboard_configmap is not none and grafana_dashboard_configmap %}
       - configMap:
           defaultMode: 420
           name: grafana-dashboards
